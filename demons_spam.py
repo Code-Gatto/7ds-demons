@@ -89,18 +89,17 @@ wincap =  WindowCapture('BlueStacks')
 if True:
     #images to identify
     battle_menu = Vision('bluestacks_SS\\battle_menu.jpg')
-    blue_ok =  Vision('bluestacks_SS\\Blue_ok.jpg')
     green_ok = Vision('bluestacks_SS\\Green_ok.jpg')
     demon_join = Vision('bluestacks_SS\\demons\\demon_join.jpg')
     auto = Vision('bluestacks_SS\\demons\\auto.jpg')
-    bunny = Vision('bluestacks_SS\\demons\\bunny.jpg')
+    bunny = Vision('bluestacks_SS\\demons\\bunny.jpg') #crimson demon
     demon_accept = Vision('bluestacks_SS\\demons\\demon_accept.jpg')
     demons = Vision('bluestacks_SS\\demons\\demons.jpg')
-    fattie = Vision('bluestacks_SS\\demons\\fattie.jpg')
+    fattie = Vision('bluestacks_SS\\demons\\fattie.jpg') #red demon
     prep = Vision('bluestacks_SS\\demons\\prep.jpg')
-    skinny = Vision('bluestacks_SS\\demons\\skinny.jpg')
-    demon_diff = Vision('bluestacks_SS\\demons\\demon_diff.jpg')
-    is_normal_demons = Vision('bluestacks_SS\\demons\\is_normal_demons.jpg')
+    skinny = Vision('bluestacks_SS\\demons\\skinny.jpg') #gray demon
+    demon_diff = Vision('bluestacks_SS\\demons\\demon_diff.jpg') #this is hell diff
+    demon_hard = Vision('bluestacks_SS\\demons\\demon_hard.jpg') #this is for hard
     bell = Vision('bluestacks_SS\\demons\\bellmoth.jpg')
     demon_ok = Vision('bluestacks_SS\\demons\\demon_ok.jpg')
     tavern = Vision('bluestacks_SS\\tavern.jpg')
@@ -143,7 +142,7 @@ while(True):
     #pick a demon and join raid
     if True:
         while True:
-            search_and_click(rectangles, bunny, 0.85)
+            search_and_click(rectangles, bunny, 0.85) #here you want to change demons
             while True:
                 if clicked := True:
                     #search for first image, dark orb in this case
@@ -170,7 +169,7 @@ while(True):
                                 clicked = False # variable to confirm next image was found
                                 break
                             #make sure timer didn't run out or some twat took back invite
-                            rectangles = skinny.find(screenshot, 0.9)
+                            rectangles = skinny.find(screenshot, 0.9) #again don't think you want to change this demon
                             output_im = demon_join.draw_rectangles(screenshot, rectangles)
                             cv.imshow('Matches', output_im)
                             #if we see the demon timer probably ran out
@@ -181,11 +180,11 @@ while(True):
                                 if frames >= 15:
                                     print("need to find another invite")
                                     (screenshot, window_location) = wincap.get_screenshot()
-                                    rectangles = skinny.find(screenshot, 0.95)
-                                    output_im = skinny.draw_rectangles(screenshot, rectangles)
+                                    rectangles = bunny.find(screenshot, 0.95) #change the demon here from skinny to whatever demon you want to do
+                                    output_im = bunny.draw_rectangles(screenshot, rectangles) #also here
                                     cv.imshow('Matches', output_im)
                                     if rectangles.size != 0:
-                                        click_im(rectangles, skinny)
+                                        click_im(rectangles, bunny) #and here 
                                         print("picked demon again")
                                         break
                                     #print('FPS {}'.format(1 / (time() - loop_time)))
@@ -202,6 +201,7 @@ while(True):
                         if clicked == False:
                             break
                     #making sure the previous click registered
+                    #unless you're doing bells dont change this to bunny or reds it can fuck up the script
                     rectangles = skinny.find(screenshot, 0.85)
                     output_im = skinny.draw_rectangles(screenshot, rectangles)
                     cv.imshow('Matches', output_im)
