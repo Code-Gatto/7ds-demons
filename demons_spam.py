@@ -249,9 +249,23 @@ while(True):
                     output_im = auto.draw_rectangles(screenshot, rectangles)
                     cv.imshow('Matches', output_im)
                     if rectangles.size != 0:
-                        click_im(rectangles, auto)
-                        print("autoing")
-                        break
+                        for frames in range(0, 150, 1):
+                            print(frames)
+                            (screenshot, window_location) = wincap.get_screenshot()
+                            rectangles = auto.find(screenshot, 0.75)
+                            output_im = auto.draw_rectangles(screenshot, rectangles)
+                            cv.imshow('Matches', output_im)
+                            if rectangles.size != 0:
+                                pass
+                            if cv.waitKey(1) == ord('q'):
+                                cv.destroyAllWindows()
+                                break
+                            else:
+                                frames = frames - 1
+                        if frames >= 50:
+                            click_im(rectangles, auto)
+                            print("autoing")
+                            break
                     if cv.waitKey(1) == ord('q'):
                         cv.destroyAllWindows()
                         break
