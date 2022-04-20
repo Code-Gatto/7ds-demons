@@ -31,7 +31,7 @@ if True:
     tavern = Vision('beta_client\\tavern.jpg')
     bunny = Vision('beta_client\\demons\\bunny.jpg')
     fattie = Vision('beta_client\\demons\\fattie.jpg')
-    slenderman = Vision('beta_client\\demons\\slendarman.jpg')
+    slendarman = Vision('beta_client\\demons\\slendarman.jpg')
     bell = Vision('beta_client\\demons\\bell.jpg')
     auto = Vision('beta_client\\demons\\auto.jpg')
     demons = Vision('beta_client\\demons\\demons.jpg')
@@ -43,7 +43,7 @@ if True:
     dead = Vision('beta_client\\demons\\dead_ok.jpg')
     dcd = Vision('beta_client\\reconnect.jpg')
     wincap =  WindowCapture('The Seven Deadly Sins: Grand Cross')
-
+    orange_ok = Vision('beta_client\orange_ok.jpg')
 def spam(spamming, diff):
     global screenshot
     last_clicked = None
@@ -58,14 +58,23 @@ def spam(spamming, diff):
         #     pyautogui.keyDown('alt')
         #     pyautogui.press('f4')
         #     pyautogui.keyUp('alt')
-        sleep(0.15)
+        sleep(0.1)
         screenshot = wincap.get_screenshot()
         output_im = screenshot
-        cv.imshow('Matches', output_im)
+        # cv.imshow('Matches', output_im)
         if cv.waitKey(1) == ord('q'):
             cv.destroyAllWindows()
             break
         if (time() - loop_time) >= (thread_time + 1):
+            if clicked == False:
+                rectangles = orange_ok.find(screenshot, 0.85)
+                if rectangles.size != 0:
+                    t = threading.Thread(target=sleep_and_click, args=[(thread_time := 1), orange_ok, 0.7])
+                    t.start()
+                    clicked = True
+                    loop_time = time()
+                    last_clicked = None
+                    print("daily reset")
             if clicked == False:
                 rectangles = dcd.find(screenshot, 0.7)
                 if rectangles.size != 0:
@@ -128,7 +137,7 @@ def spam(spamming, diff):
                     last_clicked = demons
                     print("clicking demons menu")
             #do we need to search for the demon, change according to demon you want to spam
-            if clicked == False and (last_clicked == None or last_clicked == demons or (last_clicked == accept_raid and (time() - loop_time) >= 30) or (last_clicked == diff and (time() - loop_time) >= 120)):
+            if clicked == False and (last_clicked == None or last_clicked == demons or last_clicked == green_ok or (last_clicked == spamming and (time() - loop_time) >= 20) or (last_clicked == accept_raid and (time() - loop_time) >= 30) or (last_clicked == diff and (time() - loop_time) >= 120)):
                 rectangles = spamming.find(screenshot, 0.65)
                 if rectangles.size != 0:
                     t = threading.Thread(target=sleep_and_click, args=[(thread_time := 1.5), spamming, 0.65])
@@ -151,7 +160,7 @@ def spam(spamming, diff):
             if clicked == False and last_clicked == diff:
                 rectangles = accept_raid.find(screenshot, 0.85)
                 if rectangles.size != 0:
-                    t = threading.Thread(target=sleep_and_click, args=[(thread_time := 8.5), accept_raid, 0.65])
+                    t = threading.Thread(target=sleep_and_click, args=[(thread_time := 8), accept_raid, 0.65])
                     t.start()
                     clicked = True
                     last_clicked = accept_raid
@@ -159,7 +168,7 @@ def spam(spamming, diff):
                     print("accepting raid")
             #do we need to search for prep
             if clicked == False and (last_clicked == None or last_clicked == green_ok or last_clicked == accept_raid or (last_clicked == prep and (time() - loop_time) >= 2)):
-                rectangles = prep.find(screenshot, 0.55)
+                rectangles = prep.find(screenshot, 0.65)
                 if rectangles.size != 0:
                     t = threading.Thread(target=sleep_and_click, args=[(thread_time := 0.001), prep, 0.5])
                     t.start()
@@ -180,10 +189,10 @@ def spam(spamming, diff):
             if clicked == True:
                 clicked = False
         # print(time()-loop_time)
-        if (time() - loop_time) >= 180:
+        if ((time() - loop_time) >= 150 and (last_clicked != auto)) or ((time() - loop_time) >= 420 and (last_clicked == auto)):
             loop_time = time()
             last_clicked = None
             print("time")
     print("done")
 
-spam(fattie, hell)
+spam(bunny, hell)
