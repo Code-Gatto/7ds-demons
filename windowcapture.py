@@ -1,6 +1,5 @@
 import numpy as np
 import win32gui, win32ui, win32con, win32api
-import pyautogui
 from time import sleep
 
 
@@ -31,22 +30,14 @@ class WindowCapture:
         self.w = window_rect[2] - window_rect[0]
         self.h = window_rect[3] - window_rect[1]
         window_location = [window_rect[0], window_rect[1]]
+
         # account for the window border and titlebar and cut them off
-        if window_name == ('BlueStacks'):
-            border_pixels = 2
-            titlebar_pixels = 34
-            self.w = self.w - (border_pixels * 2)
-            self.h = self.h - titlebar_pixels - border_pixels
-            self.cropped_x = border_pixels
-            self.cropped_y = titlebar_pixels - 1
-        # account for the window border and titlebar and cut them off
-        if window_name == ('The Seven Deadly Sins: Grand Cross'):
-            border_pixels = 8
-            titlebar_pixels = 30
-            self.w = self.w - (border_pixels * 2)
-            self.h = self.h - titlebar_pixels - border_pixels
-            self.cropped_x = border_pixels
-            self.cropped_y = titlebar_pixels
+        border_pixels = 8
+        titlebar_pixels = 34
+        self.w = self.w - (border_pixels * 2)
+        self.h = self.h - titlebar_pixels - border_pixels
+        self.cropped_x = border_pixels
+        self.cropped_y = titlebar_pixels
 
         # set the cropped coordinates offset so we can translate screenshot
         # images into actual screen positions
@@ -88,6 +79,7 @@ class WindowCapture:
         # https://github.com/opencv/opencv/issues/14866#issuecomment-580207109
         img = np.ascontiguousarray(img)
 
+
         return img
 
     # find the name of the window you're interested in.
@@ -105,20 +97,19 @@ class WindowCapture:
     # WARNING: if you move the window being captured after execution is started, this will
     # return incorrect coordinates, because the window position is only calculated in
     # the __init__ constructor.
-    def print_screen_position(self):
+    def print_game_position(self):
         return (f"window position is:\n X position: {self.offset_x}\n Y position: {self.offset_y}\n Width:      {self.w}\n Height:     {self.h}")
 
     def get_game_position(self):
         return self.offset_x, self.offset_y
 
-    def take_SS(self, save_path):
-        im1 = pyautogui.screenshot(region=(self.offset_x, self.offset_y ,self.w ,self.h))
-        im1.save(save_path)
-
     def click(self, x, y):
         win32api.SetCursorPos((x, y))
-        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
+        sleep(0.01)
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
         sleep(0.05)
-        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
-        sleep(0.05)
-        win32api.SetCursorPos(((self.offset_x - 10), y))
+        win32api.SetCursorPos(((self.offset_x - 20), y))
+
+    def center_curser(self):
+        win32api.SetCursorPos(((self.offset_x + (self.w - 270)), (self.offset_y + (self.h - 480))))
