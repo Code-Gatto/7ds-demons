@@ -1,7 +1,5 @@
 import cv2 as cv
 import numpy as np
-import win32api, win32con
-from time import sleep
 
 class Vision:
     # constants
@@ -127,8 +125,3 @@ class Vision:
 
         return haystack_img
 
-def click(x, y):
-    win32api.SetCursorPos((x, y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
-    sleep(0.01)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
